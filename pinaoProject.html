@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .display{
+            text-align: center;
+            margin-top: 20px;
+        }
+        h3{
+            color: white;
+            font-weight: bold;
+            font-size: 2em;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        input{
+            width: 250px;
+            height: 40px;
+            padding: 5px;
+        }
+        input:focus{
+            outline: none;
+            caret-color: rgba(0,0,0,0);
+        }
+
+        .showroom::-webkit-scrollbar{
+            width: 10px;
+            max-height: 30px; height: 30px;
+        }
+        .showroom::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px grey;
+            border-radius: 10px;
+            background-color: aqua;
+            max-height: 50%; height: 50%;
+        }
+        .showroom::-webkit-scrollbar-thumb {
+            background:#141455 ;
+            border-radius: 10px;
+            height: 10px;
+        }
+        body{
+            background-color: #141455;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            width: 600px;
+            height: 150px;
+            background-color: white;
+            border-top-left-radius: 50px;
+            border-top-right-radius: 50px;
+            box-shadow: 5px 5px 20px #ffffff;
+        }
+        button.keyBtn{
+            padding: 10px 15px;
+            margin : 10px;
+            height: 100px;
+            text-align: start;
+            border: none;
+            width: 50px;
+            position: relative;
+            background: #eee;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            transition: 0.5s;
+        }
+        button:hover{
+            transform: scale(0.95);
+        }
+        button.keyBtn::after{
+            content: '';
+            height: 20px;
+            width: 50px;
+            background-color: #000333;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .save-btn{
+            height: 40px;
+            padding: 10px 15px;
+        }
+        .showroom{
+            width: 600px;
+            height: 250px;
+            background-color: white;
+            border-radius: 20px;
+            text-align: center;
+            margin: 40px auto;
+            overflow-y: scroll;
+            position: relative;
+            box-shadow: 2px 2px 20px white;
+            padding: 10px;
+        }
+        ul{
+            position: relative;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+        ul li{
+            background-color: #141455;
+            padding: 15px 15px;
+            margin: 10px 0;
+            list-style-type: none;
+            color: white;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<header class="display" id="display">
+    <h3>PINAO</h3>
+    <input type="text" id="dashboard">
+    <button class="save-btn" onclick="saveMemory()">Save</button>
+</header>
+
+<section class="container" id="container">
+
+</section>
+
+<div class="showroom">
+    <ul id="list">
+
+    </ul>
+</div>
+
+<script>
+    let container = document.getElementById("container");
+    let dash = document.getElementById("dashboard");
+    let list = document.getElementById("list");
+    let songs = ["C4","D4","E4","F4","G4","A4","B4","C5"];
+    let memory = [];
+
+    songs.map(el =>{
+        container.innerHTML += `<button class="keyBtn" onclick="play('${el}')">${el}</button>`
+    });
+
+    play = (x) => {
+        const a = new Audio(`sound/${x}.mp3`)
+        a.play();
+        dash.value += x + ","
+    }
+
+    autoPlay = (arr,delay=300) => {
+        let x = Number(delay);
+        arr.map(el => {
+            setTimeout(play,x,el);
+            x += delay;
+        })
+    }
+
+    saveMemory = () =>{
+        let nodes = dash.value;
+        memory.push(nodes)
+        dash.value = "";
+        list.innerHTML = "";
+        memory.map((el,index) => {
+            list.innerHTML += `<li>${el}<button class="save-btn" onclick="rePlay('${index}')">Replay</button></li>`
+        })
+    }
+
+    rePlay = (x) => {
+        let current = memory[x].split(",");
+        current.pop();
+        autoPlay(current)
+    }
+
+    document.addEventListener("keyup",(e)=>{
+        let now = e.keyCode;
+        if (e.keyCode == 65){
+            play('C4')
+        }else if (e.keyCode == 83){
+            play('D4')
+        }else if (e.keyCode == 68){
+            play('E4')
+        }else if (e.keyCode == 70){
+            play('F4')
+        }else if (e.keyCode == 74){
+            play('G4')
+        }else if (e.keyCode == 75){
+            play('A4')
+        }else if (e.keyCode == 76){
+            play('B4')
+        }else if (e.keyCode == 186){
+            play('c5')
+        }else{
+            console.log("side false number")
+        }
+    })
+
+
+</script>
+
+</body>
+</html>
